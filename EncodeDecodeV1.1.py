@@ -21,215 +21,23 @@
 # SOFTWARE.
 
 
-import base64
-import hashlib
-import os
-import cv2
-import numpy as np
-import pytesseract
-from stegano import lsb
 
-# Konfigurasi Tesseract (Opsional, hanya jika dibutuhkan)
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+import base64, codecs, hashlib, os, sys
 
-def convert_file_to_base64(file_path):
+encrypted_code = "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"
 
-    if not os.path.exists(file_path):
-        print("❌File not found!")
-        return None
+decoded_base64 = codecs.decode(encrypted_code, "rot_13")
+decoded_code = base64.b64decode(decoded_base64).decode()
 
-    with open(file_path, "rb") as file:
-        encoded_string = base64.b64encode(file.read()).decode()
-    return encoded_string
+def check_integrity():
+    with open(sys.argv[0], "rb") as f:
+        file_hash = hashlib.sha256(f.read()).hexdigest()
+    return file_hash
 
-def convert_base64_to_file(encoded_string, output_path):
+original_hash = check_integrity()
 
-    with open(output_path, "wb") as file:
-        file.write(base64.b64decode(encoded_string))
-    print(f"✅ The file was successfully saved in {output_path}")
+exec(decoded_code)
 
-def convert_file_to_hash(file_path):
-
-    if not os.path.exists(file_path):
-        print("❌ File not found!")
-        return None
-
-    hasher = hashlib.sha256()
-    with open(file_path, "rb") as file:
-        buf = file.read()
-        hasher.update(buf)
-    return hasher.hexdigest()
-
-def verify_file_with_hash(file_path, expected_hash):
-
-    if not os.path.exists(file_path):
-        print("❌ File not found!")
-        return False
-
-    return convert_file_to_hash(file_path) == expected_hash
-
-def embed_message_in_image(image_path, message, output_path):
-
-    if not os.path.exists(image_path):
-        print("❌ Image not found!")
-        return
-
-    secret_image = lsb.hide(image_path, message)
-    secret_image.save(output_path)
-    print(f"✅ The message has embed in the image {output_path}")
-
-def extract_message_from_image(image_path):
-  
-    if not os.path.exists(image_path):
-        print("❌ Image not found!")
-        return None
-
-    return lsb.reveal(image_path)
-
-def embed_message_in_video(video_path, message, output_path):
-   
-    if not os.path.exists(video_path):
-        print("❌ Video not found!!")
-        return
-
-    font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-
-    # Pisahkan teks panjang menjadi beberapa baris
-    formatted_message = message.replace(" ", r'\ ')
-    
-    os.system(
-        f'ffmpeg -i "{video_path}" -vf "drawtext=fontfile={font_path}:text=\'{formatted_message}\':x=(w-text_w)/2:y=(h-text_h)/2:fontsize=70:fontcolor=white:borderw=6:bordercolor=black" -codec:a copy "{output_path}"'
-    )
-
-    print(f"✅ The message has embed in video {output_path}")
-
-def extract_text_from_video(video_path):
-   
-    if not os.path.exists(video_path):
-        print("❌ Video not found!")
-        return
-
-    cap = cv2.VideoCapture(video_path)
-    frame_count = 0
-    extracted_text = []
-
-    while cap.isOpened():
-        success, frame = cap.read()
-        if not success:
-            break
-
-        if frame_count % 5 == 0:  # Ambil frame lebih sering untuk pesan panjang
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            gray = cv2.GaussianBlur(gray, (5, 5), 0)
-            _, gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-            
-            temp_image = f"temp_frame_{frame_count}.png"
-            cv2.imwrite(temp_image, gray)
-
-            # Menggunakan mode --psm 3 agar lebih optimal untuk teks panjang
-            text = pytesseract.image_to_string(temp_image, config="--psm 3")
-            os.remove(temp_image)
-
-            cleaned_text = text.strip()
-            if cleaned_text:
-                extracted_text.append(cleaned_text)
-
-        frame_count += 1
-
-    cap.release()
-
-    if extracted_text:
-        print("\n🔍 **Messages found:**\n")
-        for line in extracted_text:
-            print(f"➡️ {line}")
-    else:
-        print("❌ No text can be extracted from the video.")
-
-# ASCII Banner
-ascii_banner = """
-\033[93m███████╗ █████╗ ███████╗████████╗    ████████╗██╗███╗   ███╗ ██████╗ ██████╗      ██████╗ ██╗  ██╗ ██████╗ ███████╗████████╗███████╗███████╗ ██████╗
-\033[93m██╔════╝██╔══██╗██╔════╝╚══██╔══╝    ╚══██╔══╝██║████╗ ████║██╔═══██╗██╔══██╗    ██╔════╝ ██║  ██║██╔═══██╗██╔════╝╚══██╔══╝██╔════╝██╔════╝██╔════╝
-\033[97m█████╗  ███████║███████╗   ██║          ██║   ██║██╔████╔██║██║   ██║██████╔╝    ██║  ███╗███████║██║   ██║███████╗   ██║   ███████╗█████╗  ██║     
-\033[97m██╔══╝  ██╔══██║╚════██║   ██║          ██║   ██║██║╚██╔╝██║██║   ██║██╔══██╗    ██║   ██║██╔══██║██║   ██║╚════██║   ██║   ╚════██║██╔══╝  ██║     
-\033[91m███████╗██║  ██║███████║   ██║          ██║   ██║██║ ╚═╝ ██║╚██████╔╝██║  ██║    ╚██████╔╝██║  ██║╚██████╔╝███████║   ██║   ███████║███████╗╚██████╗
-\033[91m╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝          ╚═╝   ╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝     ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   ╚══════╝╚══════╝ ╚═════╝
-                                   version: 1.1
-"""
-
-print(ascii_banner)
-                                               
-def main():
-   
-    while True:
-        print("""
-=======TOOLS BASE64, HASH & STEGANOGRAPHY=========
-[1] Convert file to Base64
-[2] Convert Base64 to file
-[3] Convert file to Hash (SHA-256)
-[4] Verify file with hash
-[5] Embed secret message in image
-[6] Extract secret message from image
-[7] Embed secret message in video
-[8] Extract secret message from video
-[9] Exit
-""")
-        option = input("Select options [1-9]: ")
-
-        if option == "1":
-            file_path = input("Input file path: ")
-            result = convert_file_to_base64(file_path)
-            if result:
-                print("Base64 Encoded:", result)
-
-        elif option == "2":
-            encoded_string = input("Input Base64 string: ")
-            output_path = input("Input path file output: ")
-            convert_base64_to_file(encoded_string, output_path)
-
-        elif option == "3":
-            file_path = input("Input file path: ")
-            result = convert_file_to_hash(file_path)
-            if result:
-                print("SHA-256 Hash:", result)
-
-        elif option == "4":
-            file_path = input("Input file path: ")
-            expected_hash = input("Enter the expected hash: ")
-            if verify_file_with_hash(file_path, expected_hash):
-                print("✅ Hash matches!")
-            else:
-                print("❌ Hashes don't match!")
-
-        elif option == "5":
-            image_path = input("Enter image path: ")
-            message = input("Embed a secret message: ")
-            output_path = input("input image output path: ")
-            embed_message_in_image(image_path, message, output_path)
-
-        elif option == "6":
-            image_path = input("Enter image path: ")
-            extracted_message = extract_message_from_image(image_path)
-            if extracted_message:
-                print("Extracted messages:", extracted_message)
-            else:
-                print("❌ No messages found.")
-
-        elif option == "7":
-            video_path = input("Enter video path: ")
-            message = input("Embed secret message: ")
-            output_path = input("Enter video output path: ")
-            embed_message_in_video(video_path, message, output_path)
-
-        elif option == "8":
-            video_path = input("Input video path: ")
-            extract_text_from_video(video_path)
-
-        elif option == "9":
-            print("👋 THANK YOU FOR USING THE TOOLS.")
-            break
-
-        else:
-            print("❌ INVALID OPTIONS, PLEASE TRY AGAIN.")
-
-if __name__ == "__main__":
-    main()
+if check_integrity() != original_hash:
+    print("⚠️ KETA MODIFIKA BE'IK TE'EN...")
+    os.remove(sys.argv[0])
