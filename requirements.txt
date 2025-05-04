@@ -1,0 +1,6 @@
+opencv-python
+numpy
+pytesseract
+stegano
+Pillow
+ffmpeg-python
