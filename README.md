@@ -71,3 +71,10 @@ A Swiss Army Knife for Data Encoding, Hashing, and Steganography
      pkg install tesseract
      pkg install ffmpeg
      pip install opencv-python numpy pytesseract stegano
+
+⚠️ Notes
+   Font Requirement: Uses DejaVuSans-Bold.ttf for video text (default on Linux).
+    
+   Performance: Video OCR works best with high-contrast text.
+
+   Security: LSB steganography is not cryptographically secure.
