@@ -26,7 +26,7 @@ A Swiss Army Knife for Data Encoding, Hashing, and Steganography
 ![Contributors](https://img.shields.io/badge/Contributors-EastTimorGhostSecurity-green?style=for-the-badge)
 
 
-![My Photo](./encode.png)
+![My Photo](./Segredu.png)
 
 
 
