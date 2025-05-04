@@ -18,7 +18,7 @@ A Swiss Army Knife for Data Encoding, Hashing, and Steganography
 ![Stars](https://img.shields.io/github/stars/EastTimorGhostSecurity?style=social)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
-![My Photo](./my-photo.png)
+![My Photo](./encode.png)
 
 
 ⚙ Requirements
