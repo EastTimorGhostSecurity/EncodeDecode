@@ -2,6 +2,8 @@
 
 ⚙ Requirements
 
+        pip install -r requirements.txt
+
 🐧Linux (Ubuntu, Debian, Kali,)
         
         sudo apt update && sudo apt install tesseract-ocr
