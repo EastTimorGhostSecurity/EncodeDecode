@@ -4,3 +4,5 @@ pytesseract
 stegano
 Pillow
 ffmpeg-python
+pyarmor
+cython
