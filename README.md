@@ -19,7 +19,9 @@ A Swiss Army Knife for Data Encoding, Hashing, and Steganography
    🎥 Video Steganography (FFmpeg + OCR)
       
    Embed text in videos or extract it using Tesseract OCR.
-
+![Python](https://img.shields.io/badge/Python-3.8+-blue?style=for-the-badge&logo=python)
+![Status](https://img.shields.io/badge/Ready-yellow?style=for-the-badge)
+![Contributors](https://img.shields.io/badge/Contributors-EastTimorGhostSecurity-green?style=for-the-badge)
 ![pipeline](https://img.shields.io/badge/pipeline-passed-brightgreen)
 ![Stars](https://img.shields.io/github/stars/EastTimorGhostSecurity?style=social)
 ![License](https://img.shields.io/badge/license-MIT-blue)
