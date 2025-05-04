@@ -5,14 +5,20 @@ A Swiss Army Knife for Data Encoding, Hashing, and Steganography
 🌟 Features
 
    🔢 Base64 Encoding/Decoding
-     Convert files ↔ Base64 text seamlessly.
+    
+   Convert files ↔ Base64 text seamlessly.
 
    🖇️ SHA-256 File Hashing
-      Generate and verify file integrity checksums.
+     
+   Generate and verify file integrity checksums.
+   
    🖼️ Image Steganography (LSB)
-      Hide/retrieve secret messages in PNGs (Lossless).
+   
+   Hide/retrieve secret messages in PNGs (Lossless).
+   
    🎥 Video Steganography (FFmpeg + OCR)
-      Embed text in videos or extract it using Tesseract OCR.
+      
+   Embed text in videos or extract it using Tesseract OCR.
 
 ![pipeline](https://img.shields.io/badge/pipeline-passed-brightgreen)
 ![Stars](https://img.shields.io/github/stars/EastTimorGhostSecurity?style=social)
